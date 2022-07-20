@@ -1,6 +1,6 @@
 import { Text3D } from "@react-three/drei";
 import React, { useEffect, useLayoutEffect, useMemo, useRef } from "react";
-import { Mesh, MeshNormalMaterial, Vector3 } from "three";
+import { Mesh, MeshNormalMaterial, Vector3, WireframeGeometry } from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { extend, useLoader } from "@react-three/fiber";
@@ -54,6 +54,7 @@ import roboto from "../assets/fonts/roboto-black-regular.json";
 
 const MyName = () => {
   extend({ TextGeometry });
+  let vPositions: { x: number; y: number; z: number }[] = [];
   const mesh = useRef<Mesh>(null!);
   useEffect(() => {
     const size = new Vector3();
@@ -62,7 +63,15 @@ const MyName = () => {
     mesh.current.geometry.boundingBox!.getSize(size);
     mesh.current.position.x = size.x / 2;
     mesh.current.position.y = size.y / 2;
-    let vertices;
+    let vertices = mesh.current.geometry.attributes.position.array;
+    for (let i = 0; i < vertices.length; i = i + 3) {
+      vPositions.push({
+        x: vertices[i],
+        y: vertices[i + 1],
+        z: vertices[i + 2],
+      });
+    }
+    console.log(JSON.stringify(vPositions));
   }, []);
   const font = new FontLoader().parse(roboto);
   return (
@@ -71,7 +80,7 @@ const MyName = () => {
       //@ts-ignore*/}
       <textGeometry
         args={[
-          "Daniel Wu",
+          "DANIEL WU",
           {
             font,
             size: 1,
@@ -87,6 +96,7 @@ const MyName = () => {
         color={"white"}
         specular={0x555555}
         shininess={30}
+        wireframe={true}
       ></meshPhongMaterial>
     </mesh>
   );
