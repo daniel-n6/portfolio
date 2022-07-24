@@ -1,6 +1,5 @@
-import React, { Suspense, useEffect, useRef } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import Cube from "../components/cube";
+import React, { useRef } from "react";
+import { Canvas } from "@react-three/fiber";
 import {
   CameraHelper,
   DirectionalLight,
@@ -8,20 +7,8 @@ import {
   PerspectiveCamera,
   Vector3,
 } from "three/src/Three";
-//import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import {
-  Bounds,
-  Float,
-  OrbitControls,
-  Stars,
-  useHelper,
-} from "@react-three/drei";
+import { OrbitControls, Stars, useHelper } from "@react-three/drei";
 import MyName from "../components/myname";
-import {
-  Bloom,
-  EffectComposer,
-  SelectiveBloom,
-} from "@react-three/postprocessing";
 // markup
 const IndexPage = () => {
   return (
@@ -38,7 +25,7 @@ const IndexPage = () => {
           fade
           speed={1}
         />
-        <TestPoint position={new Vector3(0, 0, 0)}></TestPoint>
+        <ambientLight intensity={0.5} />
       </Canvas>
     </div>
   );
@@ -63,21 +50,6 @@ function TestCamera() {
       position={new Vector3(0, 0, 5)}
     ></perspectiveCamera>
   );
-}
-
-function CameraController() {
-  const { camera, gl } = useThree();
-
-  useEffect(() => {
-    const controls = new OrbitControls(camera, gl.domElement);
-    controls.enablePan = false;
-    controls.minDistance = 3;
-    controls.maxDistance = 70;
-    return () => {
-      controls.dispose();
-    };
-  }, [camera, gl]);
-  return null;
 }
 
 interface TestPointProps {

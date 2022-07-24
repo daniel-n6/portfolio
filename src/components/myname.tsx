@@ -1,32 +1,10 @@
-import { Text3D } from "@react-three/drei";
-import React, {
-  ReactNode,
-  Suspense,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import {
-  Mesh,
-  MeshNormalMaterial,
-  Scene,
-  Vector3,
-  WebGLRenderTarget,
-  WireframeGeometry,
-} from "three";
+import React, { Suspense, useLayoutEffect, useRef } from "react";
+import { Mesh, Vector3 } from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
-import {
-  extend,
-  SceneProps,
-  useFrame,
-  useLoader,
-  useThree,
-} from "@react-three/fiber";
+import { extend } from "@react-three/fiber";
 import roboto from "../assets/fonts/roboto-black-regular.json";
-import { Bloom, EffectComposer } from "@react-three/postprocessing";
+import { EffectComposer, SelectiveBloom } from "@react-three/postprocessing";
 
 const MyName = () => {
   extend({ TextGeometry });
@@ -69,21 +47,22 @@ const MyName = () => {
             },
           ]}
         ></textGeometry>
-        <meshBasicMaterial
+        <meshStandardMaterial
           color={"white"}
           //specular={0x555555}
           //shininess={30}
           wireframe={true}
           //emissive={0xffffff}
-        ></meshBasicMaterial>
+        ></meshStandardMaterial>
       </mesh>
-      <EffectComposer>
-        <Bloom
+      <EffectComposer multisampling={0}>
+        <SelectiveBloom
+          selection={[mesh]}
+          mipmapBlur
+          radius={0.75}
           luminanceThreshold={0}
-          luminanceSmoothing={0.9}
-          height={300}
-          opacity={3}
-        ></Bloom>
+          intensity={5}
+        ></SelectiveBloom>
       </EffectComposer>
     </Suspense>
   );
