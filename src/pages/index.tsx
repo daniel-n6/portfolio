@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { Suspense, useEffect, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import Cube from "../components/cube";
 import {
@@ -8,16 +8,28 @@ import {
   PerspectiveCamera,
   Vector3,
 } from "three/src/Three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { Float, Stars, useHelper } from "@react-three/drei";
+//import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import {
+  Bounds,
+  Float,
+  OrbitControls,
+  Stars,
+  useHelper,
+} from "@react-three/drei";
 import MyName from "../components/myname";
+import {
+  Bloom,
+  EffectComposer,
+  SelectiveBloom,
+} from "@react-three/postprocessing";
 // markup
 const IndexPage = () => {
   return (
     <div id="canvas-container">
       <Canvas camera={{ position: [0, 0, -10] }}>
+        <OrbitControls />
         <color attach="background" args={["black"]} />
-        <MyName></MyName>
+        <MyName />
         <Stars
           radius={100}
           depth={50}
@@ -26,7 +38,7 @@ const IndexPage = () => {
           fade
           speed={1}
         />
-        <CameraController></CameraController>
+        <TestPoint position={new Vector3(0, 0, 0)}></TestPoint>
       </Canvas>
     </div>
   );
