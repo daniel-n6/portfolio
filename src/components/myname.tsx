@@ -17,19 +17,10 @@ const MyName = () => {
     mesh.current.geometry.boundingBox!.getSize(size);
     mesh.current.position.x += size.x / 2;
     mesh.current.position.y -= size.y / 2;
-    let vertices = mesh.current.geometry.attributes.position.array;
-    for (let i = 0; i < vertices.length; i = i + 3) {
-      vPositions.push({
-        x: vertices[i],
-        y: vertices[i + 1],
-        z: vertices[i + 2],
-      });
-    }
-    console.log(JSON.stringify(vPositions));
   }, []);
   const font = new FontLoader().parse(roboto);
   return (
-    <Suspense>
+    <>
       <mesh position={new Vector3(0, 0, 50)} ref={mesh}>
         {/*
       //@ts-ignore*/}
@@ -64,7 +55,7 @@ const MyName = () => {
           intensity={5}
         ></SelectiveBloom>
       </EffectComposer>
-    </Suspense>
+    </>
   );
 };
 

@@ -17,14 +17,16 @@ const IndexPage = () => {
         <OrbitControls />
         <color attach="background" args={["black"]} />
         <MyName />
-        <Stars
-          radius={100}
-          depth={50}
-          count={1000}
-          factor={20}
-          fade
-          speed={1}
-        />
+        <group position={new Vector3(0, 0, 0)}>
+          <Stars
+            radius={100}
+            depth={100}
+            count={1000}
+            factor={20}
+            fade
+            speed={1}
+          />
+        </group>
         <ambientLight intensity={0.5} />
       </Canvas>
     </div>
