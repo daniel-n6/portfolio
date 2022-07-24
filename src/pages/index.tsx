@@ -9,7 +9,7 @@ import {
   Vector3,
 } from "three/src/Three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { useHelper } from "@react-three/drei";
+import { Float, Stars, useHelper } from "@react-three/drei";
 import MyName from "../components/myname";
 // markup
 const IndexPage = () => {
@@ -17,8 +17,15 @@ const IndexPage = () => {
     <div id="canvas-container">
       <Canvas camera={{ position: [0, 0, -10] }}>
         <color attach="background" args={["black"]} />
-        <Light></Light>
         <MyName></MyName>
+        <Stars
+          radius={100}
+          depth={50}
+          count={1000}
+          factor={20}
+          fade
+          speed={1}
+        />
         <CameraController></CameraController>
       </Canvas>
     </div>
@@ -51,11 +58,24 @@ function CameraController() {
 
   useEffect(() => {
     const controls = new OrbitControls(camera, gl.domElement);
+    controls.enablePan = false;
     controls.minDistance = 3;
-    controls.maxDistance = 20;
+    controls.maxDistance = 70;
     return () => {
       controls.dispose();
     };
   }, [camera, gl]);
   return null;
+}
+
+interface TestPointProps {
+  position: Vector3 | undefined;
+}
+function TestPoint({ position }: TestPointProps) {
+  return (
+    <mesh position={position}>
+      <sphereGeometry></sphereGeometry>
+      <meshBasicMaterial></meshBasicMaterial>
+    </mesh>
+  );
 }

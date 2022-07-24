@@ -4,6 +4,9 @@ import { Mesh, MeshNormalMaterial, Vector3, WireframeGeometry } from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { extend, useLoader } from "@react-three/fiber";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import roboto from "../assets/fonts/roboto-black-regular.json";
 
 /* const MyName = ({
@@ -58,11 +61,11 @@ const MyName = () => {
   const mesh = useRef<Mesh>(null!);
   useEffect(() => {
     const size = new Vector3();
-    mesh.current.lookAt(new Vector3(0, 5, 0));
+    mesh.current.lookAt(new Vector3(0, 0, 0));
     mesh.current.geometry.computeBoundingBox();
     mesh.current.geometry.boundingBox!.getSize(size);
     mesh.current.position.x = size.x / 2;
-    mesh.current.position.y = size.y / 2;
+    mesh.current.position.y = -size.y / 2;
     let vertices = mesh.current.geometry.attributes.position.array;
     for (let i = 0; i < vertices.length; i = i + 3) {
       vPositions.push({
@@ -75,7 +78,7 @@ const MyName = () => {
   }, []);
   const font = new FontLoader().parse(roboto);
   return (
-    <mesh position={new Vector3(0, 5, 5)} ref={mesh}>
+    <mesh position={new Vector3(0, 0, 50)} ref={mesh}>
       {/*
       //@ts-ignore*/}
       <textGeometry
@@ -83,21 +86,22 @@ const MyName = () => {
           "DANIEL WU",
           {
             font,
-            size: 1,
-            height: 0.5,
+            size: 10,
+            height: 1,
             bevelEnabled: true,
-            bevelThickness: 0.1,
-            bevelSize: 0.1,
-            bevelSegments: 10,
+            bevelThickness: 0.5,
+            bevelSize: 0.5,
+            bevelSegments: 1,
           },
         ]}
       ></textGeometry>
-      <meshPhongMaterial
+      <meshBasicMaterial
         color={"white"}
-        specular={0x555555}
-        shininess={30}
+        //specular={0x555555}
+        //shininess={30}
         wireframe={true}
-      ></meshPhongMaterial>
+        //emissive={0xffffff}
+      ></meshBasicMaterial>
     </mesh>
   );
 };
