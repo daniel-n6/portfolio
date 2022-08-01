@@ -1,5 +1,5 @@
-import React, { useRef } from "react";
-import { Canvas } from "@react-three/fiber";
+import React, { Suspense, useRef } from "react";
+import { Canvas, context } from "@react-three/fiber";
 import {
   CameraHelper,
   DirectionalLight,
@@ -7,29 +7,45 @@ import {
   PerspectiveCamera,
   Vector3,
 } from "three/src/Three";
-import { OrbitControls, Stars, useHelper } from "@react-three/drei";
+import {
+  OrbitControls,
+  Stars,
+  useContextBridge,
+  useHelper,
+} from "@react-three/drei";
 import MyName from "../components/myname";
+import Overlay from "../components/overlay";
+import WaveformAnalyzer from "../components/waveform-analyzer";
+import useStartStore, { StartState } from "../state/start";
 // markup
+//
 const IndexPage = () => {
+  //const startval = useAppSelector((state) => state.startReducer.startval);
+  const startStore = useStartStore();
   return (
-    <div id="canvas-container">
-      <Canvas camera={{ position: [0, 0, -10] }}>
-        <OrbitControls />
-        <color attach="background" args={["black"]} />
-        <MyName />
-        <group position={new Vector3(0, 0, 0)}>
-          <Stars
-            radius={100}
-            depth={100}
-            count={1000}
-            factor={20}
-            fade
-            speed={1}
-          />
-        </group>
-        <ambientLight intensity={0.5} />
-      </Canvas>
-    </div>
+    <>
+      {/*<audio src="/home-resonance.wav" autoPlay loop />*/}
+      <div id="canvas-container">
+        <Canvas camera={{ position: [0, 0, -10] }}>
+          <OrbitControls />
+          <color attach="background" args={["black"]} />
+          <MyName />
+          <group position={new Vector3(0, 0, 0)}>
+            <Stars
+              radius={100}
+              depth={100}
+              count={1000}
+              factor={20}
+              fade
+              speed={1}
+            />
+          </group>
+          <ambientLight intensity={0.5} />
+          {/*<TestPoint position={new Vector3(0, 0, 0)} />*/}
+        </Canvas>
+      </div>
+      {startStore.startval !== StartState.Faded ? <Overlay></Overlay> : null}
+    </>
   );
 };
 
@@ -58,6 +74,7 @@ interface TestPointProps {
   position: Vector3 | undefined;
 }
 function TestPoint({ position }: TestPointProps) {
+  //const startval = useAppSelector((state) => state.startReducer.startval);
   return (
     <mesh position={position}>
       <sphereGeometry></sphereGeometry>
