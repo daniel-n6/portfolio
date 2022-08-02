@@ -9,6 +9,7 @@ import { SelectiveBloomEffect } from "postprocessing";
 import { useSpring } from "react-spring";
 import useStartStore, { StartState } from "../state/start";
 import { Text3D } from "@react-three/drei";
+import { useControls } from "leva";
 
 const MyName = () => {
   extend({ TextGeometry });
@@ -16,8 +17,9 @@ const MyName = () => {
   const bloom = useRef<SelectiveBloomEffect>(null!);
   const startStore = useStartStore();
   const [intensity, setIntensity] = useState<number>(0);
+  //const { intensity } = useControls({ intensity: 5 });
   useLayoutEffect(() => {
-    console.log(typeof bloom);
+    //console.log(typeof bloom);
     const size = new Vector3();
     mesh.current.geometry.computeBoundingBox();
     mesh.current.geometry.boundingBox!.getSize(size);
@@ -25,15 +27,16 @@ const MyName = () => {
     mesh.current.position.y = -size.y / 2;
     mesh.current.position.z = 50;
   }, []);
+
   useSpring({
     s: startStore.startval === StartState.Faded ? 5 : 0,
-    onFrame: ({ number: s = 0 }) => {
-      setIntensity(s);
-      console.log(intensity);
+    onChange: (result, spring, item) => {
+      setIntensity(spring.get().s);
     },
     config: {
-      duration: 500,
-      clamp: false,
+      mass: 0.5,
+      tension: 10,
+      friction: 2,
     },
   });
   const font = new FontLoader().parse(roboto);
@@ -74,7 +77,7 @@ const MyName = () => {
           mipmapBlur
           radius={0.75}
           luminanceThreshold={0}
-          intensity={5}
+          intensity={intensity}
         ></SelectiveBloom>
       </EffectComposer>
     </>
