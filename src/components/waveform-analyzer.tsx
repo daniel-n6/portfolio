@@ -9,6 +9,7 @@ import {
   Vector3,
   AudioAnalyser,
   PlaneBufferGeometry,
+  BufferAttribute,
 } from "three";
 import useStartStore, { StartState } from "../state/start";
 
@@ -34,17 +35,29 @@ const WaveformAnalyzer = () => {
   useFrame(({ clock }) => {
     if (analyser) {
       const data = analyser.getFrequencyData();
-      for (let i = 0; i < plane.current.attributes.position.count; i++) {
+      const count = plane.current.attributes.position.count;
+      const rgbLen = 3;
+      const colors = new Uint8Array(rgbLen * count);
+      for (let i = 0; i < count; i++) {
         const x = plane.current.attributes.position.getX(i);
         const y = plane.current.attributes.position.getY(i);
-        plane.current.attributes.position.setZ(
-          i,
+        const newZ =
           Math.sin(
             data[Math.floor((Math.abs(x) / (size * 0.5)) * 45)] / 50 +
               data[Math.floor((Math.abs(y) / (size * 0.5)) * 45)] / 50
-          ) * 5
-        );
+          ) * 5;
+        plane.current.attributes.position.setZ(i, newZ);
+        colors[i * rgbLen] =
+          255 - Math.pow(Math.abs(x) / (size * 0.5), 1 / 4) * 255;
+        colors[i * rgbLen + 1] =
+          255 - Math.pow(Math.abs(y) / (size * 0.5), 1 / 4) * 255;
+        colors[i * rgbLen + 2] =
+          ((Math.abs(x) + Math.abs(y)) / 2 / (size * 0.5)) * 255;
       }
+      plane.current.setAttribute(
+        "color",
+        new BufferAttribute(colors, rgbLen, true)
+      );
       plane.current.computeVertexNormals();
       plane.current.attributes.position.needsUpdate = true;
     }
@@ -52,7 +65,11 @@ const WaveformAnalyzer = () => {
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={new Vector3(0, -30, 50)}>
       <planeBufferGeometry ref={plane} args={[size, size, size, size]} />
-      <meshBasicMaterial color={"white"} wireframe={true}></meshBasicMaterial>
+      <meshBasicMaterial
+        //color={"white"}
+        vertexColors={true}
+        wireframe={true}
+      ></meshBasicMaterial>
     </mesh>
   );
 };
