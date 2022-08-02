@@ -1,16 +1,23 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Mesh, Vector3 } from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { extend, useFrame } from "@react-three/fiber";
 import roboto from "../assets/fonts/roboto-black-regular.json";
 import { EffectComposer, SelectiveBloom } from "@react-three/postprocessing";
+import { SelectiveBloomEffect } from "postprocessing";
+import { useSpring } from "react-spring";
+import useStartStore, { StartState } from "../state/start";
 import { Text3D } from "@react-three/drei";
 
 const MyName = () => {
   extend({ TextGeometry });
   const mesh = useRef<Mesh>(null!);
+  const bloom = useRef<SelectiveBloomEffect>(null!);
+  const startStore = useStartStore();
+  const [intensity, setIntensity] = useState<number>(0);
   useLayoutEffect(() => {
+    console.log(typeof bloom);
     const size = new Vector3();
     mesh.current.geometry.computeBoundingBox();
     mesh.current.geometry.boundingBox!.getSize(size);
@@ -18,6 +25,17 @@ const MyName = () => {
     mesh.current.position.y = -size.y / 2;
     mesh.current.position.z = 50;
   }, []);
+  useSpring({
+    s: startStore.startval === StartState.Faded ? 5 : 0,
+    onFrame: ({ number: s = 0 }) => {
+      setIntensity(s);
+      console.log(intensity);
+    },
+    config: {
+      duration: 500,
+      clamp: false,
+    },
+  });
   const font = new FontLoader().parse(roboto);
   return (
     <>
@@ -51,6 +69,7 @@ const MyName = () => {
       </mesh>
       <EffectComposer multisampling={0}>
         <SelectiveBloom
+          ref={bloom}
           selection={[mesh]}
           mipmapBlur
           radius={0.75}

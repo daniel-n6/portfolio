@@ -24,7 +24,6 @@ const IndexPage = () => {
   const startStore = useStartStore();
   return (
     <>
-      {/*<audio src="/home-resonance.wav" autoPlay loop />*/}
       <div id="canvas-container">
         <Canvas camera={{ position: [0, 0, -10] }}>
           <OrbitControls />
