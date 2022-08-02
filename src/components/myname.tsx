@@ -5,6 +5,7 @@ import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { extend, useFrame } from "@react-three/fiber";
 import roboto from "../assets/fonts/roboto-black-regular.json";
 import { EffectComposer, SelectiveBloom } from "@react-three/postprocessing";
+import { Text3D } from "@react-three/drei";
 
 const MyName = () => {
   extend({ TextGeometry });
@@ -36,7 +37,10 @@ const MyName = () => {
               bevelSegments: 1,
             },
           ]}
-        ></textGeometry>
+        >
+          {/*
+      //@ts-ignore*/}
+        </textGeometry>
         <meshBasicMaterial
           color={"white"}
           //specular={0x555555}

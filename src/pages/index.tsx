@@ -30,6 +30,7 @@ const IndexPage = () => {
           <OrbitControls />
           <color attach="background" args={["black"]} />
           <MyName />
+          <WaveformAnalyzer />
           <group position={new Vector3(0, 0, 0)}>
             <Stars
               radius={100}
