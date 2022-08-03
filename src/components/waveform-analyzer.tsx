@@ -9,7 +9,6 @@ import useStartStore, { StartState } from "../state/start";
 const WaveformAnalyzer = () => {
   const { camera } = useThree();
   //const buffer = useLoader(THREE.AudioLoader, "/home-resonance.wav");
-  const startStore = useStartStore();
   const audioStore = useAudioStore();
   const size = 100;
   const plane = useRef<THREE.PlaneBufferGeometry>(null!);

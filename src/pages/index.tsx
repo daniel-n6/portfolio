@@ -17,6 +17,7 @@ import MyName from "../components/myname";
 import Overlay from "../components/overlay";
 import WaveformAnalyzer from "../components/waveform-analyzer";
 import useStartStore, { StartState } from "../state/start";
+import Navbar from "../components/navbar";
 // markup
 //
 const IndexPage = () => {
@@ -24,6 +25,7 @@ const IndexPage = () => {
   const startStore = useStartStore();
   return (
     <>
+      <Navbar />
       <div id="canvas-container">
         <Canvas camera={{ position: [0, 0, -10] }}>
           <OrbitControls />
