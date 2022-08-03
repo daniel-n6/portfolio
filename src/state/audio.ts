@@ -7,6 +7,8 @@ type AudioType = {
   analyzer: THREE.AudioAnalyser | null;
   mute: () => void;
   unmute: () => void;
+  play: () => void;
+  pause: () => void;
   addAudio: (
     audio: THREE.Audio,
     listener: THREE.AudioListener,
@@ -32,6 +34,26 @@ const useAudioStore = create<AudioType>(function (set) {
     unmute: () =>
       set((state) => {
         state.audio?.setVolume(volume);
+        return {
+          ...state,
+          audio: state.audio,
+          listener: state.listener,
+          analyzer: state.analyzer,
+        };
+      }),
+    play: () =>
+      set((state) => {
+        state.audio?.play();
+        return {
+          ...state,
+          audio: state.audio,
+          listener: state.listener,
+          analyzer: state.analyzer,
+        };
+      }),
+    pause: () =>
+      set((state) => {
+        state.audio?.pause();
         return {
           ...state,
           audio: state.audio,

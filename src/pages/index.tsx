@@ -1,5 +1,5 @@
-import React, { Suspense, useRef } from "react";
-import { Canvas, context } from "@react-three/fiber";
+import React, { Suspense, useRef, useState } from "react";
+import { Canvas, context, useThree } from "@react-three/fiber";
 import {
   CameraHelper,
   DirectionalLight,
@@ -18,6 +18,9 @@ import Overlay from "../components/overlay";
 import WaveformAnalyzer from "../components/waveform-analyzer";
 import useStartStore, { StartState } from "../state/start";
 import Navbar from "../components/navbar";
+import { useControls } from "leva";
+import useAudioStore from "../state/audio";
+import { useSpring } from "react-spring";
 // markup
 //
 export const Head = () => {
@@ -51,12 +54,13 @@ export const Head = () => {
 const IndexPage = () => {
   //const startval = useAppSelector((state) => state.startReducer.startval);
   const startStore = useStartStore();
+  const audioStore = useAudioStore();
   return (
     <>
       <Navbar />
       <div id="canvas-container">
-        <Canvas camera={{ position: [0, 0, -10] }}>
-          <OrbitControls />
+        <Canvas camera={{ position: [0, 0, -2010], far: 800 }}>
+          <CameraControls />
           {<color attach="background" args={["black"]} />}
           <MyName />
           <WaveformAnalyzer />
@@ -81,6 +85,34 @@ const IndexPage = () => {
 
 export default IndexPage;
 
+const CameraControls = () => {
+  const { camera } = useThree();
+  const startStore = useStartStore();
+  /*
+  const bool = useControls({
+    bool: false,
+  });*/
+  useSpring({
+    t: startStore.startval !== StartState.Initialized ? 0 : 1,
+    onChange: (result, spring, item) => {
+      let t = spring.get().t;
+      camera.position.set(
+        -740 * t * Math.cos(2 * Math.PI * t),
+        0,
+        740 * t * Math.sin(2 * Math.PI * t) - 10
+      );
+      //let [x, y, z] = [camera.position.x, camera.position.y, camera.position.z];
+      //camera.rotation.set(0, Math.PI, 0);
+      //camera.lookAt(0, 0, 0);
+    },
+    config: {
+      //tension: 100,
+      friction: 33,
+      precision: 0.00001,
+    },
+  });
+  return <OrbitControls enabled={true} maxDistance={750} />;
+};
 function Light() {
   const light = useRef<DirectionalLight>(null!);
   useHelper(light, DirectionalLightHelper);

@@ -33,11 +33,6 @@ const MyName = () => {
     onChange: (result, spring, item) => {
       setIntensity(spring.get().s);
     },
-    config: {
-      mass: 0.5,
-      tension: 10,
-      friction: 2,
-    },
   });
   const font = new FontLoader().parse(roboto);
   return (
