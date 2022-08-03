@@ -13,14 +13,16 @@ import {
   useContextBridge,
   useHelper,
 } from "@react-three/drei";
-import MyName from "../components/myname";
+import MyName from "../components/wiretext3d";
 import Overlay from "../components/overlay";
-import WaveformAnalyzer from "../components/waveform-analyzer";
+import WaveformAnalyzer from "../components/home/waveform-analyzer";
 import useStartStore, { StartState } from "../state/start";
 import Navbar from "../components/navbar";
 import { useControls } from "leva";
 import useAudioStore from "../state/audio";
 import { useSpring } from "react-spring";
+import useSpiralStore from "../state/spiral";
+import Navigation from "../components/navigation";
 // markup
 //
 export const Head = () => {
@@ -54,17 +56,16 @@ export const Head = () => {
 const IndexPage = () => {
   //const startval = useAppSelector((state) => state.startReducer.startval);
   const startStore = useStartStore();
-  const audioStore = useAudioStore();
   return (
     <>
+      {startStore.startval !== StartState.Faded ? <Overlay></Overlay> : null}
       <Navbar />
       <div id="canvas-container">
-        <Canvas camera={{ position: [0, 0, -2010], far: 800 }}>
+        <Canvas camera={{ position: [0, 0, -2010], far: 1500 }}>
           <CameraControls />
           {<color attach="background" args={["black"]} />}
-          <MyName />
-          <WaveformAnalyzer />
-          <group position={new Vector3(0, 0, 0)}>
+          <group scale={new Vector3(1, 1, 1)}>
+            <Navigation />
             <Stars
               radius={100}
               depth={100}
@@ -74,11 +75,10 @@ const IndexPage = () => {
               speed={1}
             />
           </group>
-          <ambientLight intensity={0.5} />
+          {/*<ambientLight intensity={0.5} />*/}
           {/*<TestPoint position={new Vector3(0, 0, 0)} />*/}
         </Canvas>
       </div>
-      {startStore.startval !== StartState.Faded ? <Overlay></Overlay> : null}
     </>
   );
 };
@@ -88,6 +88,8 @@ export default IndexPage;
 const CameraControls = () => {
   const { camera } = useThree();
   const startStore = useStartStore();
+  const spiralStore = useSpiralStore();
+  const audioStore = useAudioStore();
   /*
   const bool = useControls({
     bool: false,
@@ -104,6 +106,12 @@ const CameraControls = () => {
       //let [x, y, z] = [camera.position.x, camera.position.y, camera.position.z];
       //camera.rotation.set(0, Math.PI, 0);
       //camera.lookAt(0, 0, 0);
+    },
+    onRest: () => {
+      if (!spiralStore.done) {
+        audioStore.play();
+        spiralStore.notifyDone();
+      }
     },
     config: {
       //tension: 100,

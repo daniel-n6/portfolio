@@ -10,39 +10,42 @@ import { useSpring } from "react-spring";
 import useStartStore, { StartState } from "../state/start";
 import { Text3D } from "@react-three/drei";
 import { useControls } from "leva";
+import useSpiralStore from "../state/spiral";
+import useAudioStore from "../state/audio";
+import useNavStore from "../state/nav";
 
-const MyName = () => {
+const WireText3D = ({
+  text,
+  position = [0, 0, 50],
+  rotation = [0, Math.PI, 0],
+}: {
+  text: String;
+  position?: [number, number, number];
+  rotation?: [number, number, number];
+}) => {
   extend({ TextGeometry });
   const mesh = useRef<Mesh>(null!);
   const bloom = useRef<SelectiveBloomEffect>(null!);
-  const startStore = useStartStore();
-  const [intensity, setIntensity] = useState<number>(0);
+  const navStore = useNavStore();
   //const { intensity } = useControls({ intensity: 5 });
   useLayoutEffect(() => {
     //console.log(typeof bloom);
     const size = new Vector3();
     mesh.current.geometry.computeBoundingBox();
     mesh.current.geometry.boundingBox!.getSize(size);
-    mesh.current.position.x = size.x / 2;
-    mesh.current.position.y = -size.y / 2;
-    mesh.current.position.z = 50;
-  }, []);
-
-  useSpring({
-    s: startStore.startval === StartState.Faded ? 5 : 0,
-    onChange: (result, spring, item) => {
-      setIntensity(spring.get().s);
-    },
-  });
+    mesh.current.position.x = position[0] + size.x / 2;
+    mesh.current.position.y = position[1] - size.y / 2;
+    mesh.current.position.z = position[2];
+  }, [navStore.current]);
   const font = new FontLoader().parse(roboto);
   return (
     <>
-      <mesh rotation={[0, Math.PI, 0]} ref={mesh}>
+      <mesh rotation={rotation} ref={mesh}>
         {/*
       //@ts-ignore*/}
         <textGeometry
           args={[
-            "DANIEL WU",
+            text,
             {
               font,
               size: 10,
@@ -72,11 +75,11 @@ const MyName = () => {
           mipmapBlur
           radius={0.75}
           luminanceThreshold={0}
-          intensity={intensity}
+          intensity={5}
         ></SelectiveBloom>
       </EffectComposer>
     </>
   );
 };
 
-export default MyName;
+export default WireText3D;

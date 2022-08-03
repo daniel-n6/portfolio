@@ -25,9 +25,11 @@ import {
 import { MdMusicNote, MdMusicOff } from "react-icons/md";
 import React, { useState } from "react";
 import useAudioStore from "../state/audio";
+import useNavStore, { NavItem, NavState, NAV_ITEMS } from "../state/nav";
 
 export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
+  const navStore = useNavStore();
   return (
     <Box position={"absolute"} zIndex={1} width={"100%"}>
       <Flex
@@ -56,7 +58,12 @@ export default function Navbar() {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
-          <Button variant={"link"}>
+          <Button
+            variant={"link"}
+            onClick={() => {
+              navStore.navigate(NavState.Home);
+            }}
+          >
             <Image
               borderRadius={"full"}
               border={"1px"}
@@ -82,19 +89,6 @@ export default function Navbar() {
           spacing={6}
         >
           <MusicButton />
-          {/*
-          <Button
-            display={{ base: "none", md: "inline-flex" }}
-            fontSize={"sm"}
-            fontWeight={600}
-            color={"white"}
-            bg={"pink.400"}
-            _hover={{
-              bg: "pink.300",
-            }}
-          >
-            Sign In
-        </Button>*/}
         </Stack>
       </Flex>
 
@@ -131,6 +125,7 @@ const DesktopNav = () => {
   const linkColor = "gray.200";
   const linkHoverColor = "white";
   const popoverContentBgColor = "gray.800";
+  const navStore = useNavStore();
 
   return (
     <Stack direction={"row"} spacing={4}>
@@ -141,10 +136,12 @@ const DesktopNav = () => {
               <Center>
                 <Link
                   p={2}
-                  href={navItem.href ?? "#"}
                   fontSize={"sm"}
                   fontWeight={500}
                   color={linkColor}
+                  onClick={() => {
+                    navStore.navigate(navItem.navigation);
+                  }}
                   _hover={{
                     textDecoration: "none",
                     color: linkHoverColor,
@@ -178,14 +175,17 @@ const DesktopNav = () => {
   );
 };
 
-const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
+const DesktopSubNav = ({ label, subLabel, navigation }: NavItem) => {
+  const navStore = useNavStore();
   return (
     <Link
-      href={href}
       role={"group"}
       display={"block"}
       p={2}
       rounded={"md"}
+      onClick={() => {
+        navStore.navigate(navigation);
+      }}
       _hover={{ bg: "gray.900" }}
     >
       <Stack direction={"row"} align={"center"}>
@@ -225,15 +225,13 @@ const MobileNav = () => {
   );
 };
 
-const MobileNavItem = ({ label, children, href }: NavItem) => {
+const MobileNavItem = ({ label, children }: NavItem) => {
   const { isOpen, onToggle } = useDisclosure();
 
   return (
     <Stack spacing={4} onClick={children && onToggle}>
       <Flex
         py={2}
-        //as={Link}
-        //href={href ?? "#"}
         justify={"space-between"}
         align={"center"}
         _hover={{
@@ -265,12 +263,7 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
         >
           {children &&
             children.map((child) => (
-              <Link
-                key={child.label}
-                py={2}
-                href={child.href}
-                color={"gray.200"}
-              >
+              <Link key={child.label} py={2} color={"gray.200"}>
                 {child.label}
               </Link>
             ))}
@@ -279,36 +272,3 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
     </Stack>
   );
 };
-
-interface NavItem {
-  label: string;
-  subLabel?: string;
-  children?: Array<NavItem>;
-  href?: string;
-}
-
-const NAV_ITEMS: Array<NavItem> = [
-  {
-    label: "Home",
-    href: "#",
-  },
-  {
-    label: "Portfolio",
-    children: [
-      {
-        label: "Explore Design Work",
-        subLabel: "Trending Design to inspire you",
-        href: "#",
-      },
-      {
-        label: "New & Noteworthy",
-        subLabel: "Up-and-coming Designers",
-        href: "#",
-      },
-    ],
-  },
-  {
-    label: "Contact Me",
-    href: "#",
-  },
-];

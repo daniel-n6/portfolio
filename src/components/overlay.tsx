@@ -32,7 +32,7 @@ const Overlay = () => {
               //audio.setMediaElementSource(audioElement);
               audio.setLoop(true);
               audio.setVolume(0.1);
-              audio.play();
+              //audio.play();
               const analyzer = new THREE.AudioAnalyser(audio, 1024);
               audioStore.addAudio(audio, listener, analyzer);
             });

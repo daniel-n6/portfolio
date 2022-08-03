@@ -3,8 +3,8 @@ import { useFrame, useLoader, useThree } from "@react-three/fiber";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { useEffect } from "react";
 import * as THREE from "three";
-import useAudioStore from "../state/audio";
-import useStartStore, { StartState } from "../state/start";
+import useAudioStore from "../../state/audio";
+import useStartStore, { StartState } from "../../state/start";
 
 const WaveformAnalyzer = () => {
   const { camera } = useThree();
