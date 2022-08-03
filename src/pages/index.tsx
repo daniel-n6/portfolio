@@ -20,6 +20,34 @@ import useStartStore, { StartState } from "../state/start";
 import Navbar from "../components/navbar";
 // markup
 //
+export const Head = () => {
+  return (
+    <>
+      <title>Portfolio</title>
+      <link
+        rel="apple-touch-icon"
+        sizes="180x180"
+        href="/apple-touch-icon.png"
+      />
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="32x32"
+        href="/favicon-32x32.png"
+      />
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="16x16"
+        href="/favicon-16x16.png"
+      />
+      <link rel="manifest" href="/site.webmanifest" />
+      <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+      <meta name="msapplication-TileColor" content="#da532c" />
+      <meta name="theme-color" content="#ffffff" />
+    </>
+  );
+};
 const IndexPage = () => {
   //const startval = useAppSelector((state) => state.startReducer.startval);
   const startStore = useStartStore();
@@ -29,7 +57,7 @@ const IndexPage = () => {
       <div id="canvas-container">
         <Canvas camera={{ position: [0, 0, -10] }}>
           <OrbitControls />
-          <color attach="background" args={["black"]} />
+          {<color attach="background" args={["black"]} />}
           <MyName />
           <WaveformAnalyzer />
           <group position={new Vector3(0, 0, 0)}>

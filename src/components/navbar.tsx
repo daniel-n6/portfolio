@@ -7,12 +7,14 @@ import {
   Stack,
   Collapse,
   Icon,
+  Image,
   Link,
   Popover,
   PopoverTrigger,
   PopoverContent,
   useBreakpointValue,
   useDisclosure,
+  Center,
 } from "@chakra-ui/react";
 import {
   HamburgerIcon,
@@ -54,13 +56,19 @@ export default function Navbar() {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
-          <Text
-            textAlign={useBreakpointValue({ base: "center", md: "left" })}
-            fontFamily={"heading"}
-            color={"white"}
-          >
-            Logo
-          </Text>
+          <Button variant={"link"}>
+            <Image
+              borderRadius={"full"}
+              border={"1px"}
+              borderColor={"gray.600"}
+              boxSize={"40px"}
+              src={"/icon.png"}
+              alt={"DWu"}
+              _hover={{
+                borderColor: "gray.400",
+              }}
+            />
+          </Button>
 
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
             <DesktopNav />
@@ -130,19 +138,21 @@ const DesktopNav = () => {
         <Box key={navItem.label}>
           <Popover trigger={"hover"} placement={"bottom-start"}>
             <PopoverTrigger>
-              <Link
-                p={2}
-                href={navItem.href ?? "#"}
-                fontSize={"sm"}
-                fontWeight={500}
-                color={linkColor}
-                _hover={{
-                  textDecoration: "none",
-                  color: linkHoverColor,
-                }}
-              >
-                {navItem.label}
-              </Link>
+              <Center>
+                <Link
+                  p={2}
+                  href={navItem.href ?? "#"}
+                  fontSize={"sm"}
+                  fontWeight={500}
+                  color={linkColor}
+                  _hover={{
+                    textDecoration: "none",
+                    color: linkHoverColor,
+                  }}
+                >
+                  {navItem.label}
+                </Link>
+              </Center>
             </PopoverTrigger>
 
             {navItem.children && (
