@@ -3,6 +3,7 @@ import { useSpring, animated } from "react-spring";
 import useStartStore, { StartState } from "../state/start";
 import * as THREE from "three";
 import useAudioStore from "../state/audio";
+import { withPrefix } from "gatsby";
 
 const Overlay = () => {
   //const startval = useAppSelector((state) => state.startReducer.startval);
@@ -27,7 +28,7 @@ const Overlay = () => {
             const loader = new THREE.AudioLoader();
             const listener = new THREE.AudioListener();
             const audio = new THREE.Audio(listener);
-            loader.load("/home-resonance.wav", (buffer) => {
+            loader.load(withPrefix("/home-resonance.wav"), (buffer) => {
               audio.setBuffer(buffer);
               //audio.setMediaElementSource(audioElement);
               audio.setLoop(true);
@@ -35,6 +36,8 @@ const Overlay = () => {
               //audio.play();
               const analyzer = new THREE.AudioAnalyser(audio, 1024);
               audioStore.addAudio(audio, listener, analyzer);
+              audio.play();
+              audio.pause();
             });
 
             /*

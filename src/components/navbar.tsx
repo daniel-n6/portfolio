@@ -27,6 +27,7 @@ import React, { useState } from "react";
 import useAudioStore from "../state/audio";
 import useNavStore, { NavItem, NavState, NAV_ITEMS } from "../state/nav";
 import { on } from "stream";
+import { withPrefix } from "gatsby";
 
 export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
@@ -75,7 +76,7 @@ export default function Navbar() {
                   : "gray.600"
               }
               boxSize={"40px"}
-              src={"/icon.png"}
+              src={withPrefix("/icon.png")}
               alt={"DWu"}
               _hover={{
                 borderColor: "gray.400",
