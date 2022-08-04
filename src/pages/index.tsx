@@ -1,18 +1,14 @@
-import React, { Suspense, useRef, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, context, useThree } from "@react-three/fiber";
 import {
   CameraHelper,
   DirectionalLight,
   DirectionalLightHelper,
+  Group,
   PerspectiveCamera,
   Vector3,
 } from "three/src/Three";
-import {
-  OrbitControls,
-  Stars,
-  useContextBridge,
-  useHelper,
-} from "@react-three/drei";
+import { OrbitControls, useContextBridge, useHelper } from "@react-three/drei";
 import MyName from "../components/wiretext3d";
 import Overlay from "../components/overlay";
 import WaveformAnalyzer from "../components/home/waveform-analyzer";
@@ -23,6 +19,8 @@ import useAudioStore from "../state/audio";
 import { useSpring } from "react-spring";
 import useSpiralStore from "../state/spiral";
 import Navigation from "../components/navigation";
+import useNavStore from "../state/nav";
+import { Starfield } from "../components/starfield";
 // markup
 //
 export const Head = () => {
@@ -64,17 +62,7 @@ const IndexPage = () => {
         <Canvas camera={{ position: [0, 0, -2010], far: 1500 }}>
           <CameraControls />
           {<color attach="background" args={["black"]} />}
-          <group scale={new Vector3(1, 1, 1)}>
-            <Navigation />
-            <Stars
-              radius={100}
-              depth={100}
-              count={1000}
-              factor={20}
-              fade
-              speed={1}
-            />
-          </group>
+          <App />
           {/*<ambientLight intensity={0.5} />*/}
           {/*<TestPoint position={new Vector3(0, 0, 0)} />*/}
         </Canvas>
@@ -85,6 +73,32 @@ const IndexPage = () => {
 
 export default IndexPage;
 
+const App = () => {
+  const [t, setT] = useState(1);
+  const navStore = useNavStore();
+  useSpring({
+    t: navStore.navTo === null ? 1 : 0,
+    onChange: (result, spring, item) => {
+      setT(spring.get().t);
+    },
+    onRest: () => {
+      navStore.update();
+    },
+  });
+  return (
+    <group scale={[t, t, t]} rotation={[2 * Math.PI * (1 - t), 0, 0]}>
+      <Navigation />
+      <Starfield
+        radius={100}
+        depth={100}
+        count={1000}
+        factor={20 * t}
+        fade
+        speed={1}
+      />
+    </group>
+  );
+};
 const CameraControls = () => {
   const { camera } = useThree();
   const startStore = useStartStore();

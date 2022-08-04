@@ -1,4 +1,5 @@
 import { homedir } from "os";
+import { MdOutlineNavigation } from "react-icons/md";
 import create from "zustand";
 
 export enum NavState {
@@ -45,14 +46,25 @@ export const NAV_ITEMS: Array<NavItem> = [
 ];
 
 type NavType = {
-  current: NavState;
+  navAt: NavState;
+  navTo?: NavState | null;
   navigate: (current: NavState) => void;
+  update: () => void;
 };
 
 const useNavStore = create<NavType>((set) => ({
-  current: NavState.Home,
-  navigate: (current: NavState) =>
-    set((state) => ({ ...state, current: current })),
+  navAt: NavState.Home,
+  navTo: null,
+  navigate: (nav: NavState) =>
+    set((state) => ({ ...state, navAt: state.navAt, navTo: nav })),
+  update: () =>
+    set((state) => {
+      if (state.navTo !== null) {
+        return { ...state, navAt: state.navTo!, navTo: null };
+      } else {
+        return { ...state, navAt: state.navAt, navTo: state.navTo };
+      }
+    }),
 }));
 
 export default useNavStore;

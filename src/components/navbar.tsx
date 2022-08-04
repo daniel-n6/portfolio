@@ -26,6 +26,7 @@ import { MdMusicNote, MdMusicOff } from "react-icons/md";
 import React, { useState } from "react";
 import useAudioStore from "../state/audio";
 import useNavStore, { NavItem, NavState, NAV_ITEMS } from "../state/nav";
+import { on } from "stream";
 
 export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
@@ -67,7 +68,12 @@ export default function Navbar() {
             <Image
               borderRadius={"full"}
               border={"1px"}
-              borderColor={"gray.600"}
+              borderColor={
+                navStore.navAt === NavState.Home ||
+                navStore.navTo === NavState.Home
+                  ? "gray.400"
+                  : "gray.600"
+              }
               boxSize={"40px"}
               src={"/icon.png"}
               alt={"DWu"}
@@ -138,7 +144,12 @@ const DesktopNav = () => {
                   p={2}
                   fontSize={"sm"}
                   fontWeight={500}
-                  color={linkColor}
+                  color={
+                    navStore.navAt === navItem.navigation ||
+                    navStore.navTo === navItem.navigation
+                      ? linkHoverColor
+                      : linkColor
+                  }
                   onClick={() => {
                     navStore.navigate(navItem.navigation);
                   }}
@@ -192,6 +203,11 @@ const DesktopSubNav = ({ label, subLabel, navigation }: NavItem) => {
         <Box>
           <Text
             transition={"all .3s ease"}
+            color={
+              navStore.navAt === navigation || navStore.navTo === navigation
+                ? "pink.400"
+                : "gray.200"
+            }
             _groupHover={{ color: "pink.400" }}
             fontWeight={500}
           >
@@ -225,8 +241,9 @@ const MobileNav = () => {
   );
 };
 
-const MobileNavItem = ({ label, children }: NavItem) => {
+const MobileNavItem = ({ label, navigation, children }: NavItem) => {
   const { isOpen, onToggle } = useDisclosure();
+  const navStore = useNavStore();
 
   return (
     <Stack spacing={4} onClick={children && onToggle}>
@@ -238,7 +255,13 @@ const MobileNavItem = ({ label, children }: NavItem) => {
           textDecoration: "none",
         }}
       >
-        <Text fontWeight={600} color={"gray.200"}>
+        <Text
+          fontWeight={600}
+          color={"gray.200"}
+          onClick={() => {
+            navStore.navigate(navigation);
+          }}
+        >
           {label}
         </Text>
         {children && (
@@ -263,7 +286,14 @@ const MobileNavItem = ({ label, children }: NavItem) => {
         >
           {children &&
             children.map((child) => (
-              <Link key={child.label} py={2} color={"gray.200"}>
+              <Link
+                key={child.label}
+                py={2}
+                color={"gray.200"}
+                onClick={() => {
+                  navStore.navigate(child.navigation);
+                }}
+              >
                 {child.label}
               </Link>
             ))}

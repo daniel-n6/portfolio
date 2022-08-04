@@ -5,7 +5,7 @@ import WaveformAnalyzer from "./home/waveform-analyzer";
 
 const Navigation = () => {
   const navStore = useNavStore();
-  switch (navStore.current) {
+  switch (navStore.navAt) {
     case NavState.Home: {
       return (
         <>

@@ -36,7 +36,7 @@ const WireText3D = ({
     mesh.current.position.x = position[0] + size.x / 2;
     mesh.current.position.y = position[1] - size.y / 2;
     mesh.current.position.z = position[2];
-  }, [navStore.current]);
+  }, [navStore.navAt]);
   const font = new FontLoader().parse(roboto);
   return (
     <>
