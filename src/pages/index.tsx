@@ -27,7 +27,6 @@ import { withPrefix } from "gatsby";
 export const Head = () => {
   return (
     <>
-      <title>Portfolio</title>
       <link
         rel="apple-touch-icon"
         sizes="180x180"
@@ -63,6 +62,10 @@ const IndexPage = () => {
     <>
       {startStore.startval !== StartState.Faded ? <Overlay></Overlay> : null}
       <Navbar />
+      {/*
+      <audio loop id="music" preload="auto" style={{ display: "none" }}>
+        <source src={withPrefix("/home-resonance.wav")} type="audio/wav" />
+  </audio>*/}
       <div id="canvas-container">
         <Canvas camera={{ position: [0, 0, -2010], far: 1500 }}>
           <CameraControls />

@@ -2,7 +2,7 @@ import create from "zustand";
 import * as THREE from "three";
 
 type AudioType = {
-  audio: THREE.Audio | null;
+  audio: THREE.Audio<AudioNode> | null;
   listener: THREE.AudioListener | null;
   analyzer: THREE.AudioAnalyser | null;
   mute: () => void;
@@ -10,7 +10,7 @@ type AudioType = {
   play: () => void;
   pause: () => void;
   addAudio: (
-    audio: THREE.Audio,
+    audio: THREE.Audio<AudioNode>,
     listener: THREE.AudioListener,
     analyzer: THREE.AudioAnalyser
   ) => void;
@@ -43,6 +43,7 @@ const useAudioStore = create<AudioType>(function (set) {
       }),
     play: () =>
       set((state) => {
+        console.log(state.audio);
         state.audio?.play();
         return {
           ...state,
