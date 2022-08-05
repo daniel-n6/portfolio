@@ -72,5 +72,5 @@ const useAudioStore = create<AudioType>(function (set) {
   };
 });
 
-export const volume = 0.1;
+export const volume = 0.25;
 export default useAudioStore;

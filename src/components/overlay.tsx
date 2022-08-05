@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSpring, animated } from "react-spring";
 import useStartStore, { StartState } from "../state/start";
 import * as THREE from "three";
-import useAudioStore from "../state/audio";
+import useAudioStore, { volume } from "../state/audio";
 import { withPrefix } from "gatsby";
 import { AudioLoader, Camera } from "three";
 import { useLoader, useThree } from "@react-three/fiber";
@@ -79,7 +79,7 @@ const Overlay = () => {
               console.log(buffer);
               audio.setBuffer(buffer);
               audio.setLoop(true);
-              audio.setVolume(0.5);
+              audio.setVolume(volume);
               const analyzer = new THREE.AudioAnalyser(audio, 2048);
               audioStore.addAudio(audio, listener, analyzer);
               //audio.play();

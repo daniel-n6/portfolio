@@ -95,7 +95,7 @@ const App = () => {
     },
   });
   return (
-    <group scale={[t, t, t]} rotation={[2 * Math.PI * (1 - t), 0, 0]}>
+    <group scale={[t, t, t]} /*rotation={[2 * Math.PI * (1 - t), 0, 0]}*/>
       <Navigation />
       <Starfield
         radius={100}
