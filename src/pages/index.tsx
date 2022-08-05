@@ -69,6 +69,7 @@ const IndexPage = () => {
       <div id="canvas-container">
         <Canvas camera={{ position: [0, 0, -2010], far: 1500 }}>
           <CameraControls />
+          <AudioStarter />
           {<color attach="background" args={["black"]} />}
           <App />
           {/*<ambientLight intensity={0.5} />*/}
@@ -111,7 +112,6 @@ const CameraControls = () => {
   const { camera } = useThree();
   const startStore = useStartStore();
   const spiralStore = useSpiralStore();
-  const audioStore = useAudioStore();
   /*
   const bool = useControls({
     bool: false,
@@ -131,7 +131,6 @@ const CameraControls = () => {
     },
     onRest: () => {
       if (!spiralStore.done) {
-        audioStore.play();
         spiralStore.notifyDone();
       }
     },
@@ -142,6 +141,17 @@ const CameraControls = () => {
     },
   });
   return <OrbitControls enabled={true} maxDistance={750} />;
+};
+
+const AudioStarter = () => {
+  const audioStore = useAudioStore();
+  const spiralStore = useSpiralStore();
+  useEffect(() => {
+    if (audioStore.audio !== null && spiralStore.done) {
+      audioStore.play();
+    }
+  }, [audioStore.audio, spiralStore.done]);
+  return <></>;
 };
 function Light() {
   const light = useRef<DirectionalLight>(null!);

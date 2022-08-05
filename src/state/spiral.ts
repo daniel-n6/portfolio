@@ -7,11 +7,12 @@ type SpiralType = {
 
 const useSpiralStore = create<SpiralType>((set) => ({
   done: false,
-  notifyDone: () =>
-    set((state) => ({
+  notifyDone: () => {
+    return set((state) => ({
       ...state,
       done: true,
-    })),
+    }));
+  },
 }));
 
 export default useSpiralStore;

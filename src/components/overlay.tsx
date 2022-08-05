@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSpring, animated } from "react-spring";
 import useStartStore, { StartState } from "../state/start";
 import * as THREE from "three";
@@ -7,6 +7,7 @@ import { withPrefix } from "gatsby";
 import { AudioLoader, Camera } from "three";
 import { useLoader, useThree } from "@react-three/fiber";
 import { arrayBuffer } from "stream/consumers";
+import useSpiralStore from "../state/spiral";
 
 const Overlay = () => {
   //const startval = useAppSelector((state) => state.startReducer.startval);
@@ -74,28 +75,16 @@ const Overlay = () => {
               );
             };
             request.send();*/
-            for (let i = 0; i < 2; i++) {
-              loader.load(
-                withPrefix("/home-resonance.wav"),
-                (buffer) => {
-                  console.log("hi");
-                  console.log(buffer, "test");
-                  audio.setBuffer(buffer);
-                  audio.setLoop(true);
-                  audio.setVolume(0.5);
-                  const analyzer = new THREE.AudioAnalyser(audio, 2048);
-                  audioStore.addAudio(audio, listener, analyzer);
-                  //audio.play();
-                  //audio.pause();
-                },
-                (p) => {
-                  console.log(p);
-                },
-                (e) => {
-                  console.log(e);
-                }
-              );
-            }
+            loader.load(withPrefix("/home-resonance.wav"), (buffer) => {
+              console.log(buffer);
+              audio.setBuffer(buffer);
+              audio.setLoop(true);
+              audio.setVolume(0.5);
+              const analyzer = new THREE.AudioAnalyser(audio, 2048);
+              audioStore.addAudio(audio, listener, analyzer);
+              //audio.play();
+              //audio.pause();
+            });
 
             /*
             const audioElement = document.querySelector(
