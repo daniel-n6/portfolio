@@ -110,7 +110,7 @@ const App = () => {
         radius={50}
         depth={200}
         count={1200}
-        factor={7.5 * t}
+        factor={10 * t}
         fade
         speed={3}
       />

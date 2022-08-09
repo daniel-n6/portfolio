@@ -264,11 +264,15 @@ const Button3D = ({
       rotation={rotation}
       position={position}
       onPointerOver={() => {
-        document.body.style.cursor = "pointer";
+        (
+          document.querySelector("#canvas-container")! as HTMLCanvasElement
+        ).style.cursor = "pointer";
         setHovered(true);
       }}
       onPointerOut={() => {
-        document.body.style.cursor = "default";
+        (
+          document.querySelector("#canvas-container")! as HTMLCanvasElement
+        ).style.cursor = "default";
         setHovered(false);
       }}
       onClick={() => window.open(href)}

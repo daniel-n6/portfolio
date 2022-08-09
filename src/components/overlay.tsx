@@ -63,6 +63,7 @@ const Overlay = () => {
               borderColor: "gray.400",
             }}
           />
+          <Text color="white" children={"Music: Resonance by HOME"} />
           <Text color="white" children={"Drag & scroll to explore"} />
           {progress !== 0 ? (
             <ChakraProvider theme={theme}>
