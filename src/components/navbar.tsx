@@ -63,18 +63,13 @@ export default function Navbar() {
           <Button
             variant={"link"}
             onClick={() => {
-              navStore.navigate(NavState.Home);
+              navStore.navigate(NavState.Home, [0, 0, -10]);
             }}
           >
             <Image
               borderRadius={"full"}
               border={"1px"}
-              borderColor={
-                navStore.navAt === NavState.Home ||
-                navStore.navTo === NavState.Home
-                  ? "gray.400"
-                  : "gray.600"
-              }
+              borderColor={"gray.600"}
               boxSize={"40px"}
               src={withPrefix("/icon.png")}
               alt={"DWu"}
@@ -145,14 +140,9 @@ const DesktopNav = () => {
                   p={2}
                   fontSize={"sm"}
                   fontWeight={500}
-                  color={
-                    navStore.navAt === navItem.navigation ||
-                    navStore.navTo === navItem.navigation
-                      ? linkHoverColor
-                      : linkColor
-                  }
+                  color={linkColor}
                   onClick={() => {
-                    navStore.navigate(navItem.navigation);
+                    navStore.navigate(navItem.navigation, navItem.position);
                   }}
                   _hover={{
                     textDecoration: "none",
@@ -187,7 +177,7 @@ const DesktopNav = () => {
   );
 };
 
-const DesktopSubNav = ({ label, subLabel, navigation }: NavItem) => {
+const DesktopSubNav = ({ label, subLabel, navigation, position }: NavItem) => {
   const navStore = useNavStore();
   return (
     <Link
@@ -196,7 +186,7 @@ const DesktopSubNav = ({ label, subLabel, navigation }: NavItem) => {
       p={2}
       rounded={"md"}
       onClick={() => {
-        navStore.navigate(navigation);
+        navStore.navigate(navigation, position);
       }}
       _hover={{ bg: "gray.900" }}
     >
@@ -204,11 +194,7 @@ const DesktopSubNav = ({ label, subLabel, navigation }: NavItem) => {
         <Box>
           <Text
             transition={"all .3s ease"}
-            color={
-              navStore.navAt === navigation || navStore.navTo === navigation
-                ? "pink.400"
-                : "gray.200"
-            }
+            color={"gray.200"}
             _groupHover={{ color: "pink.400" }}
             fontWeight={500}
           >
@@ -242,7 +228,7 @@ const MobileNav = () => {
   );
 };
 
-const MobileNavItem = ({ label, navigation, children }: NavItem) => {
+const MobileNavItem = ({ label, navigation, position, children }: NavItem) => {
   const { isOpen, onToggle } = useDisclosure();
   const navStore = useNavStore();
 
@@ -260,7 +246,7 @@ const MobileNavItem = ({ label, navigation, children }: NavItem) => {
           fontWeight={600}
           color={"gray.200"}
           onClick={() => {
-            navStore.navigate(navigation);
+            navStore.navigate(navigation, position);
           }}
         >
           {label}
@@ -292,7 +278,7 @@ const MobileNavItem = ({ label, navigation, children }: NavItem) => {
                 py={2}
                 color={"gray.200"}
                 onClick={() => {
-                  navStore.navigate(child.navigation);
+                  navStore.navigate(child.navigation, child.position);
                 }}
               >
                 {child.label}

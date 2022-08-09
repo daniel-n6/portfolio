@@ -27,6 +27,7 @@ import { withPrefix } from "gatsby";
 export const Head = () => {
   return (
     <>
+      <title>Daniel Wu</title>
       <link
         rel="apple-touch-icon"
         sizes="180x180"
@@ -85,12 +86,20 @@ export default IndexPage;
 const App = () => {
   const [t, setT] = useState(1);
   const navStore = useNavStore();
+  const spiralStore = useSpiralStore();
+  const { camera } = useThree();
   useSpring({
-    t: navStore.navTo === null ? 1 : 0,
+    t: !spiralStore.done || navStore.navTo === null ? 1 : 0,
     onChange: (result, spring, item) => {
       setT(spring.get().t);
     },
     onRest: () => {
+      if (navStore.navPos)
+        camera.position.set(
+          navStore.navPos[0],
+          navStore.navPos[1],
+          navStore.navPos[2]
+        );
       navStore.update();
     },
   });
@@ -98,12 +107,12 @@ const App = () => {
     <group scale={[t, t, t]} /*rotation={[2 * Math.PI * (1 - t), 0, 0]}*/>
       <Navigation />
       <Starfield
-        radius={100}
-        depth={100}
-        count={1000}
-        factor={20 * t}
+        radius={50}
+        depth={200}
+        count={1200}
+        factor={7.5 * t}
         fade
-        speed={1}
+        speed={3}
       />
     </group>
   );
@@ -140,7 +149,14 @@ const CameraControls = () => {
       precision: 0.00001,
     },
   });
-  return <OrbitControls enabled={true} maxDistance={750} />;
+  return (
+    <OrbitControls
+      enabled={true}
+      maxDistance={750}
+      enablePan={false}
+      zoomSpeed={3}
+    />
+  );
 };
 
 const AudioStarter = () => {
