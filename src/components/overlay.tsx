@@ -93,25 +93,40 @@ const Overlay = () => {
                   const loader = new THREE.AudioLoader();
                   const listener = new THREE.AudioListener();
                   const audio = new THREE.Audio(listener);
-                  loader.load(
-                    withPrefix("/home-resonance.wav"),
-                    (buffer) => {
-                      console.log(buffer);
-                      audio.setBuffer(buffer);
-                      audio.setLoop(true);
-                      audio.setVolume(volume);
-                      const analyzer = new THREE.AudioAnalyser(audio, 2048);
-                      audioStore.addAudio(audio, listener, analyzer);
-                      startStore.start();
-                      //audio.play();
-                      //audio.pause();
-                    },
-                    (progressEvent) => {
-                      setProgress(
-                        (progressEvent.loaded / progressEvent.total) * 100
-                      );
-                    }
-                  );
+
+                  const mediaElement = new Audio();
+                  if (mediaElement.canPlayType("audio/ogg")) {
+                    mediaElement.src = withPrefix("/home-resonance.opus");
+                    audio.setMediaElementSource(mediaElement);
+                    audio.setLoop(true);
+                    audio.setVolume(volume);
+                    const analyzer = new THREE.AudioAnalyser(audio, 2048);
+                    audioStore.addAudio(
+                      mediaElement,
+                      audio,
+                      listener,
+                      analyzer
+                    );
+                    startStore.start();
+                  } else {
+                    loader.load(
+                      withPrefix("/home-resonance.aac"),
+                      (buffer) => {
+                        audio.setBuffer(buffer);
+                        audio.setLoop(true);
+                        audio.setVolume(volume);
+                        const analyzer = new THREE.AudioAnalyser(audio, 2048);
+                        audioStore.addAudio(null, audio, listener, analyzer);
+                        startStore.start();
+                      },
+                      (progressEvent) => {
+                        console.log(progressEvent);
+                        setProgress(
+                          (progressEvent.loaded / progressEvent.total) * 100
+                        );
+                      }
+                    );
+                  }
                 }}
               >
                 Play

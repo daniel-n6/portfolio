@@ -2,6 +2,7 @@ import create from "zustand";
 import * as THREE from "three";
 
 type AudioType = {
+  mediaElement: HTMLAudioElement | null;
   audio: THREE.Audio<AudioNode> | null;
   listener: THREE.AudioListener | null;
   analyzer: THREE.AudioAnalyser | null;
@@ -10,6 +11,7 @@ type AudioType = {
   play: () => void;
   pause: () => void;
   addAudio: (
+    mediaElement: HTMLAudioElement | null,
     audio: THREE.Audio<AudioNode>,
     listener: THREE.AudioListener,
     analyzer: THREE.AudioAnalyser
@@ -18,6 +20,7 @@ type AudioType = {
 
 const useAudioStore = create<AudioType>(function (set) {
   return {
+    mediaElement: null,
     audio: null,
     listener: null,
     analyzer: null,
@@ -26,6 +29,7 @@ const useAudioStore = create<AudioType>(function (set) {
         state.audio?.setVolume(0);
         return {
           ...state,
+          mediaElement: state.mediaElement,
           audio: state.audio,
           listener: state.listener,
           analyzer: state.analyzer,
@@ -36,6 +40,7 @@ const useAudioStore = create<AudioType>(function (set) {
         state.audio?.setVolume(volume);
         return {
           ...state,
+          mediaElement: state.mediaElement,
           audio: state.audio,
           listener: state.listener,
           analyzer: state.analyzer,
@@ -43,10 +48,14 @@ const useAudioStore = create<AudioType>(function (set) {
       }),
     play: () =>
       set((state) => {
-        console.log(state.audio);
-        state.audio?.play();
+        if (state.mediaElement == null) {
+          state.audio?.play();
+        } else {
+          state.mediaElement.play();
+        }
         return {
           ...state,
+          mediaElement: state.mediaElement,
           audio: state.audio,
           listener: state.listener,
           analyzer: state.analyzer,
@@ -54,17 +63,23 @@ const useAudioStore = create<AudioType>(function (set) {
       }),
     pause: () =>
       set((state) => {
-        state.audio?.pause();
+        if (state.mediaElement == null) {
+          state.audio?.pause();
+        } else {
+          state.mediaElement.pause();
+        }
         return {
           ...state,
+          mediaElement: state.mediaElement,
           audio: state.audio,
           listener: state.listener,
           analyzer: state.analyzer,
         };
       }),
-    addAudio: (audio, listener, analyzer) =>
+    addAudio: (mediaElement, audio, listener, analyzer) =>
       set((state) => ({
         ...state,
+        mediaElement: mediaElement,
         audio: audio,
         listener: listener,
         analyzer: analyzer,
