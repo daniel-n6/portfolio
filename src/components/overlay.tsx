@@ -66,17 +66,28 @@ const Overlay = () => {
           <Text color="white" children={"Music: Resonance by HOME"} />
           <Text color="white" children={"Drag & scroll to explore"} />
           {progress !== 0 ? (
-            <ChakraProvider theme={theme}>
-              <Progress
-                value={progress}
-                //color={"whiteAlpha.900"}
-                borderColor={"whiteAlpha.900"}
-                borderRadius={"1rem"}
-                borderWidth={"1px"}
-                size={"sm"}
-                width={"100px"}
+            <>
+              <Text
+                color="white"
+                textAlign={"center"}
+                paddingLeft={"5px"}
+                paddingRight={"5px"}
+                children={
+                  "Loading too slow? Try running this website on a browser other than Safari"
+                }
               />
-            </ChakraProvider>
+              <ChakraProvider theme={theme}>
+                <Progress
+                  value={progress}
+                  //color={"whiteAlpha.900"}
+                  borderColor={"whiteAlpha.900"}
+                  borderRadius={"1rem"}
+                  borderWidth={"1px"}
+                  size={"sm"}
+                  width={"100px"}
+                />
+              </ChakraProvider>
+            </>
           ) : (
             <>
               <Button
@@ -97,10 +108,11 @@ const Overlay = () => {
                   const mediaElement = new Audio();
                   if (mediaElement.canPlayType("audio/ogg")) {
                     mediaElement.src = withPrefix("/home-resonance.opus");
+                    mediaElement.loop = true;
                     audio.setMediaElementSource(mediaElement);
                     audio.setLoop(true);
                     audio.setVolume(volume);
-                    const analyzer = new THREE.AudioAnalyser(audio, 2048);
+                    const analyzer = new THREE.AudioAnalyser(audio, 1024);
                     audioStore.addAudio(
                       mediaElement,
                       audio,
@@ -115,7 +127,7 @@ const Overlay = () => {
                         audio.setBuffer(buffer);
                         audio.setLoop(true);
                         audio.setVolume(volume);
-                        const analyzer = new THREE.AudioAnalyser(audio, 2048);
+                        const analyzer = new THREE.AudioAnalyser(audio, 1024);
                         audioStore.addAudio(null, audio, listener, analyzer);
                         startStore.start();
                       },

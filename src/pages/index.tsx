@@ -110,7 +110,7 @@ const App = () => {
         radius={50}
         depth={200}
         count={1200}
-        factor={10 * t}
+        factor={12 * t}
         fade
         speed={3}
       />
@@ -152,7 +152,7 @@ const CameraControls = () => {
   return (
     <OrbitControls
       enabled={true}
-      maxDistance={750}
+      maxDistance={1000}
       enablePan={false}
       zoomSpeed={3}
     />
