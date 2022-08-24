@@ -110,23 +110,17 @@ const Navigation = () => {
                 Skills
               </TextC>
               <TextC color="white" align="left" fontSize={"75px"}>
-                <b>Programming:</b> Python, Java, Dart, HTML/CSS, JavaScript,
-                TypeScript, MATLAB
+                <b>Coding:</b> JavaScript, TypeScript, Java, Python, Dart,
+                HTML/CSS, MATLAB
               </TextC>
               <TextC color="white" align="left" fontSize={"75px"}>
-                <b>Frameworks/Libraries:</b> Flutter, React, Gatsby, Three.js,
-                Redux, Zustand, Material UI, Chakra UI, Leaflet, TensorFlow,
-                NumPy, Pandas
+                <b>Frameworks & Libraries:</b> React, Flutter, PyTorch, NumPy,
+                Pandas, Scikit-learn, Socket.io, Gatsby, Three.js, Redux,
+                Zustand, Material UI, Chakra UI, Leaflet
               </TextC>
               <TextC color="white" align="left" fontSize={"75px"}>
-                <b>Cloud Services:</b> Firebase Cloud Firestore, Firebase Cloud
-                Functions, Firebase Cloud Storage
-              </TextC>
-              <TextC color="white" align="left" fontSize={"75px"}>
-                <b>Hosting:</b> Firebase Hosting, Heroku, Netlify, GitHub Pages
-              </TextC>
-              <TextC color="white" align="left" fontSize={"75px"}>
-                <b>APIs:</b> OpenStreetMap, WordPress API
+                <b>Software:</b> Git, VS Code, Amazon Web Services (AWS),
+                Firebase, Heroku, Netlify, OpenStreetMap, WordPress API
               </TextC>
             </VStack>
           </Html>
